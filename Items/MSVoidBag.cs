@@ -23,7 +23,7 @@ namespace MagicStorageVoidBag.Items {
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useAnimation = 28;
             Item.useTime = 28;
-            Item.value = Item.sellPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 10, silver: 50);
         }
 
         public override void ModifyTooltips(List<TooltipLine> lines) {
@@ -38,10 +38,11 @@ namespace MagicStorageVoidBag.Items {
         }
 
         public override void AddRecipes() {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient<PortableAccess>();
-            recipe.AddIngredient(ItemID.VoidLens);
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient<PortableAccess>()
+                .AddIngredient(ItemID.VoidLens)
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
         }
     }
 }

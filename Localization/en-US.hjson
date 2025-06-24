@@ -1,16 +1,40 @@
 Mods: {
 	MagicStorageVoidBag: {
-		ItemName.MSVoidBag: Magic Void Bag
-		ItemTooltip.MSVoidBag:
-			'''
-			<right> Storage Heart to store location
-			Currently not set to any location
-			'''
-
 		Items: {
+			MSVoidBagPreHM: {
+				DisplayName: Basic Magic Void Bag
+				Tooltip: 
+					'''
+					<right> Storage Heart to store location
+					Currently not set to any location
+					Use item to access your storage
+					May store overflowing items while in inventory
+					Linked Heart must be at most 100' from any valid pylon to gain extended reach on each pylon
+					Player must be at most 1000' away from the linked Heart or pylon to access storage
+					'''
+			},
+			MSVoidBagHM: {
+				DisplayName: Advanced Magic Void Bag
+				Tooltip: 
+					'''
+					<right> Storage Heart to store location
+					Currently not set to any location
+					Use item to access your storage
+					May store overflowing items while in inventory
+					Linked Heart must be at most 200' from any valid pylon to gain extended reach on each pylon
+					Player must be at most 3000' away from the linked Heart or pylon to access storage
+					'''
+			},
 			MSVoidBag: {
-				DisplayName: M S Void Bag
-				Tooltip: ""
+				DisplayName: Ultimate Magic Void Bag
+				Tooltip: 
+					'''
+					<right> Storage Heart to store location
+					Currently not set to any location
+					Use item to access your storage
+					May store overflowing items while in inventory
+					Has an unlimited access range
+					'''
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 displayName = MagicStorage Void Bag
 author = jack & alec
-version = 1.8
+version = 1.9
 modReferences = MagicStorage
 sortAfter = MagicStorage
 includeSource = true
