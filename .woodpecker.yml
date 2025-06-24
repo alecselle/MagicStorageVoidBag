@@ -1,0 +1,64 @@
+clone:
+  git:
+    image: woodpeckerci/plugin-git:latest
+    settings:
+      path: MagicStorageVoidBag
+    when:
+      event: tag
+
+pipeline:
+  fetch-deps:
+    image: jackbondpreston/msvb-build-env
+    commands:
+      - steamcmd "+login anonymous" "+workshop_download_item 1281930 2563309347" "+quit"
+      - wget https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip
+      - unzip -q tModLoader.zip -d tModLoader
+      - rm tModLoader.zip
+      - ln -sf $CI_WORKSPACE/tModLoader/Libraries/Native/Linux/libSDL2-2.0.so.0 $CI_WORKSPACE/tModLoader/Libraries/Native/Linux/libSDL2.so
+      - >
+        echo "<Project ToolsVersion=\"14.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">
+            <Import Project=\"$CI_WORKSPACE/tModLoader/tMLMod.targets\" />
+        </Project>" > tModLoader.targets
+      - |
+        wget https://github.com/steviegt6/tml-patcher/releases/latest/download/TML.Patcher.zip
+        unzip -q TML.Patcher.zip -d TMLPatcher
+      - |
+        rm -f /root/.steam/SteamApps/workshop/content/1281930/2563309347/workshop.json
+        YEAR=$(ls /root/.steam/SteamApps/workshop/content/1281930/2563309347 | cut -c -4 | sort -nr | head -n 1)
+        VER=$(find /root/.steam/SteamApps/workshop/content/1281930/2563309347/ -type d -name "$YEAR.*" -printf "%f\n" | cut -c 6- | sort -nr | head -n 1)
+        cp /root/.steam/SteamApps/workshop/content/1281930/2563309347/$YEAR.$VER/MagicStorage.tmod ./
+      - dotnet TMLPatcher/TML.Patcher.dll extract MagicStorage.tmod
+      - cp MagicStorage/MagicStorage.dll $CI_WORKSPACE/
+    when:
+      event: tag
+
+  build:
+    image: jackbondpreston/msvb-build-env
+    commands:
+      - |
+        echo "Shell: $SHELL"
+        echo "CI_WORKSPACE: $CI_WORKSPACE"
+      - cat tModLoader.targets
+      - cd $CI_WORKSPACE
+      - cd MagicStorageVoidBag
+      - rm -rf .git
+      - dotnet build -c Release || true
+      - cp bin/Release/net6.0/MagicStorageVoidBag.dll .
+      - cd $CI_WORKSPACE
+      - mkdir release
+      - cp ~/.local/share/Terraria/tModLoader/Mods/MagicStorageVoidBag.tmod release/
+      - cp MagicStorageVoidBag/MagicStorageVoidBag.dll release/
+      - ls release
+    when:
+      event: tag
+    
+  gitea-release:
+    image: plugins/gitea-release
+    settings:
+      api_key:
+        from_secret: gitea-api-key
+      base_url: https://git.jackbondpreston.me
+      files: release/*
+    when:
+      event: tag
+

@@ -1,0 +1,7 @@
+displayName = MagicStorage Void Bag
+author = jack & alec
+version = 1.8
+modReferences = MagicStorage
+sortAfter = MagicStorage
+includeSource = true
+homepage = https://git.alecselle.com/alecselle/MagicStorageVoidBag

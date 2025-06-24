@@ -1,0 +1,17 @@
+Mods: {
+	MagicStorageVoidBag: {
+		ItemName.MSVoidBag: Magic Void Bag
+		ItemTooltip.MSVoidBag:
+			'''
+			<right> Storage Heart to store location
+			Currently not set to any location
+			'''
+
+		Items: {
+			MSVoidBag: {
+				DisplayName: M S Void Bag
+				Tooltip: ""
+			}
+		}
+	}
+}
