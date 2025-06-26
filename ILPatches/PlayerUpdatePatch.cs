@@ -1,47 +1,41 @@
-﻿using MagicStorageVoidBag.Items;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using MagicStorageVoidBag.Items;
 
 namespace MagicStorageVoidBag.ILPatches {
     internal class PlayerUpdatePatch : ILPatch {
-        private static readonly log4net.ILog Logger = MagicStorageVoidBag.Instance.Logger;
         public void Patch(ILContext il) {
-            try {
-                if (il == null) {
-                    Logger.Error("ILContext null!");
-                    return;
-                }
+            var c = new ILCursor(il);
 
-                Logger.Debug("Patching Terraria.Player.Update IL...");
+            if (!c.TryGotoNext(i => i.MatchLdcI4(ItemID.VoidLens)))
+                return;
+            c.Index--;
 
-                var c = new ILCursor(il);
-                var setterMethod = typeof(Player).GetProperty(nameof(Player.IsVoidVaultEnabled)).GetSetMethod();
-                if (!c.TryGotoNext(i => i.MatchCallOrCallvirt(setterMethod))) {
-                    Logger.Error("Failed to go to next call or callvirt! :(");
-                    return;
-                }
+            c.RemoveRange(3);
 
-                c.Emit(OpCodes.Ldarg_0);
-                c.Emit(OpCodes.Ldc_I4, ModContent.ItemType<MSVoidBag>());
-                var hasItemMethod = typeof(Player).GetMethod(nameof(Player.HasItem), new[] { typeof(int) });
-                if (hasItemMethod == null) {
-                    Logger.Error("Failed to reflect Player.HasItem(int)! :(");
-                    return;
-                }
-                c.Emit(OpCodes.Call, hasItemMethod);
-                c.Emit(OpCodes.Or);
+            var hasItemMethod = typeof(Player).GetMethod(nameof(Player.HasItem), new[] { typeof(int) });
 
-                Logger.Debug("...Complete!");
-            } catch (Exception e) {
-                throw new ILPatchFailureException(MagicStorageVoidBag.Instance, il, e);
-            }
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldc_I4, ModContent.ItemType<MSVoidBag>());
+            c.Emit(OpCodes.Call, hasItemMethod);
+
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldc_I4, ModContent.ItemType<MSVoidBagHM>());
+            c.Emit(OpCodes.Call, hasItemMethod);
+            c.Emit(OpCodes.Or);
+
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldc_I4, ModContent.ItemType<MSVoidBagPreHM>());
+            c.Emit(OpCodes.Call, hasItemMethod);
+            c.Emit(OpCodes.Or);
+
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldc_I4, ItemID.VoidLens);
+            c.Emit(OpCodes.Call, hasItemMethod);
+            c.Emit(OpCodes.Or);
         }
     }
 }

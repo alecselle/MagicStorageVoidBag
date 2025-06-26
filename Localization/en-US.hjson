@@ -8,7 +8,7 @@ Mods: {
 					<right> Storage Heart to store location
 					Currently not set to any location
 					Use item to access your storage
-					May store overflowing items while in inventory with an open void bag
+					May store overflowing items while in inventory
 					Linked Heart must be at most 100' from any valid pylon to gain extended reach on each pylon
 					Player must be at most 1000' away from the linked Heart or pylon to access storage
 					'''
@@ -20,7 +20,7 @@ Mods: {
 					<right> Storage Heart to store location
 					Currently not set to any location
 					Use item to access your storage
-					May store overflowing items while in inventory with an open void bag
+					May store overflowing items while in inventory
 					Linked Heart must be at most 200' from any valid pylon to gain extended reach on each pylon
 					Player must be at most 3000' away from the linked Heart or pylon to access storage
 					'''
@@ -32,7 +32,7 @@ Mods: {
 					<right> Storage Heart to store location
 					Currently not set to any location
 					Use item to access your storage
-					May store overflowing items while in inventory with an open void bag
+					May store overflowing items while in inventory
 					Has an unlimited access range
 					'''
 			}

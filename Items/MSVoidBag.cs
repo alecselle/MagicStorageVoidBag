@@ -1,5 +1,4 @@
 ﻿using MagicStorage.Items;
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Creative;

@@ -1,4 +1,3 @@
-
 using Terraria.ModLoader;
 using MagicStorageVoidBag.ILPatches;
 using MagicStorageVoidBag.Hooks;
@@ -7,7 +6,6 @@ namespace MagicStorageVoidBag {
     public class MagicStorageVoidBag : Mod {
         public static MagicStorageVoidBag Instance => ModContent.GetInstance<MagicStorageVoidBag>();
 
-        // IL Patches
         private PlayerUpdatePatch playerUpdatePatch = new();
 
         public override void Load() { 
@@ -15,6 +13,7 @@ namespace MagicStorageVoidBag {
 
             Terraria.On_Player.GetItem_VoidVault += GetItemVoidVaultHook.Hook;
             Terraria.On_Player.ItemSpaceForCofveve += ItemSpaceForCofveveHook.Hook;
+            Terraria.On_Player.GetItem += GetItemMagicStorageBagHook.Hook;
         }
 
         public override void Unload() {
@@ -22,6 +21,7 @@ namespace MagicStorageVoidBag {
 
             Terraria.On_Player.GetItem_VoidVault -= GetItemVoidVaultHook.Hook;
             Terraria.On_Player.ItemSpaceForCofveve -= ItemSpaceForCofveveHook.Hook;
+            Terraria.On_Player.GetItem -= GetItemMagicStorageBagHook.Hook;
 
             base.Unload();
         }

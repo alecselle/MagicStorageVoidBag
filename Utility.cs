@@ -1,11 +1,13 @@
 ﻿using MagicStorage;
 using MagicStorage.Components;
+using MagicStorageVoidBag.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Microsoft.Xna.Framework;
 
 namespace MagicStorageVoidBag {
     internal static class Utility {
@@ -20,6 +22,15 @@ namespace MagicStorageVoidBag {
             }
 
             return false;
+        }
+
+        public static bool IsWithinBagRange(Player player, MSVoidBag bag, out float dist, out float maxRange) {
+            if (!bag.GetEffectiveRange(out maxRange, out _)) {
+                dist = float.MaxValue;
+                return false;
+            }
+            dist = Vector2.Distance(player.Center, bag.Location.ToWorldCoordinates(8, 8));
+            return dist <= maxRange;
         }
     }
 }
